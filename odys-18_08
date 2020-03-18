@@ -1,0 +1,45 @@
+title: "Biostatistics_Report"
+output:
+  html_document:
+    df_print: paged
+---
+
+Data load
+```{r}
+raw_data <- read.table(file = paste0("/Users/odcha/Documents/EPFL/Semester_2/Applied_Biostatistics/airline_costs.dat.txt"), header = F, row.names=1, sep="", as.is=T)
+colnames(raw_data) <- c("Length","Speed","Time","Population","Cost","Revenue","Load_Factor","Capacity","Total_Assets","Funds", "Adjusted_Assets")
+```
+
+Plot raw data
+```{r}
+layout(matrix(1:4, nrow = 2))
+plot(log(Cost) ~ log(Length), data = raw_data)
+plot(log(Cost) ~ log(Speed), data = raw_data)
+plot(log(Cost) ~ log(Time), data = raw_data)
+plot(log(Cost) ~ log(Population), data = raw_data)
+layout(matrix(1:4, nrow = 2))
+plot(log(Cost) ~ log(Revenue), data = raw_data)
+plot(Cost ~ Load_Factor, data = raw_data)
+plot(log(Cost) ~ log(Capacity), data = raw_data)
+plot(log(Cost) ~ log(Total_Assets), data = raw_data)
+layout(matrix(1:4, nrow = 2))
+plot(log(Cost) ~ log(Funds), data = raw_data)
+plot(log(Cost) ~ log(Adjusted_Assets), data = raw_data)
+```
+
+Model Formula
+```{r}
+cost.formula <- log(Cost) ~ log(Length) + log(Speed) + log(Time) + log(Population) + log(Revenue) + Load_Factor + log(Capacity) + log(Total_Assets) + log(Funds) + log(Adjusted_Assets)
+cost.lm <- lm(cost.formula, data = raw_data)
+summary(cost.lm)
+cost.resid <- residuals(cost.lm)
+summary(cost.resid)
+cost.fitted <- fitted(cost.lm)
+summary(cost.fitted)
+```
+
+Plot
+```{r}
+layout(1)
+plot(log(Cost) ~ log(Revenue), data = raw_data)
+```
